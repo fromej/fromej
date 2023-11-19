@@ -1,0 +1,112 @@
+kind: pipeline
+type: kubernetes
+name: notify start
+
+steps:
+  - name: notify start
+    image: plugins/matrix
+    settings:
+      homeserver:
+        from_secret: matrix_home_server
+      roomid:
+        from_secret: matrix_room_id
+      username:
+        from_secret: matrix_username
+      password:
+        from_secret: matrix_password
+      accesstoken:
+        from_secret: matrix_access_token
+      template: |-
+        [${DRONE_REPO_NAME}]
+        Build **started** for [${DRONE_REPO_NAME}#${DRONE_COMMIT_SHA:0:8}](${DRONE_BUILD_LINK}) (${DRONE_BRANCH}) by ${DRONE_COMMIT_AUTHOR}.
+
+---
+kind: pipeline
+type: kubernetes
+name: build
+
+steps:
+  # Build the Docker image for the application
+  - name: build docker image
+    image: plugins/docker
+    settings:
+      autotag: true
+      registry: gitea.lemoen-eijsden.nl
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: gitea.lemoen-eijsden.nl/${DRONE_REPO}
+      tags:
+        - "${DRONE_COMMIT_SHA:0:8}"
+        - latest
+      mtu: 1450
+
+  # Deploy app with helm3
+  - name: deploy
+    image: evertjstam/drone-helm3:0.16
+    settings:
+      mode: upgrade
+      wait: true
+      add_repos:
+        - "helm=https://gitea.lemoen-eijsden.nl/api/packages/evertjanstamhuis/helm"
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      namespace: dev
+      chart: helm/docs
+      release: fromej
+      values:
+        - image.tag=${DRONE_COMMIT_SHA:0:8}
+      values_files:
+        - charts/values.yaml
+    environment:
+      KUBE_API_SERVER:
+        from_secret: k3s_server
+      KUBE_TOKEN:
+        from_secret: k3s_token
+      KUBE_CERTIFICATE:
+        from_secret: k3s_cert
+      KUBE_SERVICE_ACCOUNT: default
+depends_on:
+- notify start
+trigger:
+  status:
+  - success
+  - failure
+
+---
+kind: pipeline
+type: kubernetes
+name: notify status
+
+steps:
+  - name: notify status
+    image: plugins/matrix
+    settings:
+      homeserver:
+        from_secret: matrix_home_server
+      roomid:
+        from_secret: matrix_room_id
+      username:
+        from_secret: matrix_username
+      password:
+        from_secret: matrix_password
+      accesstoken:
+        from_secret: matrix_access_token
+      template: |-
+        [${DRONE_REPO_NAME}]
+        Build **${DRONE_BUILD_STATUS}** for [${DRONE_REPO_NAME}#${DRONE_COMMIT_SHA:0:8}](${DRONE_BUILD_LINK}) (${DRONE_BRANCH}) by ${DRONE_COMMIT_AUTHOR}.
+
+        fromej.nl
+    when:
+      status:
+      - success
+      - failure
+depends_on:
+- build
+trigger:
+  status:
+  - success
+  - failure
