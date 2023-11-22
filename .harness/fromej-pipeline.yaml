@@ -10,11 +10,13 @@ spec:
             spec:
               name: docker
               inputs:
+                username: ${{ secrets.get("docker_username") }}
+                password: ${{ secrets.get("docker_password") }}
                 auto_tag: true
                 dockerfile: Dockerfile
                 platform: linux/arm64
                 registry: http://registry-docker-registry.registry.svc.cluster.local:5000
-                repo: http://registry-docker-registry.registry.svc.cluster.local:5000/fromej
+                repo: fromej
                 insecure: true
                 tags:
                   - latest
