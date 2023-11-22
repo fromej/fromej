@@ -14,7 +14,7 @@ spec:
                 dockerfile: Dockerfile
                 platform: linux/arm64
                 registry: http://registry-docker-registry.registry.svc.cluster.local:5000
-                repo: fromej
+                repo: http://registry-docker-registry.registry.svc.cluster.local:5000/fromej
                 insecure: true
                 tags:
                   - latest
