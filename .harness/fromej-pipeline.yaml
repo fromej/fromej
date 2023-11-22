@@ -15,6 +15,7 @@ spec:
                 platform: linux/arm64
                 registry: http://registry-docker-registry.registry.svc.cluster.local:5000
                 repo: fromej
+                insecure: true
                 tags:
                   - latest
                   - ${{ build.commit:0:8 }}
