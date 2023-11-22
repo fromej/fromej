@@ -13,7 +13,7 @@ spec:
                 auto_tag: true
                 dockerfile: Dockerfile
                 platform: linux/arm64
-                registry: http://registry-docker-registry.registry.svc.cluster.local
+                registry: http://registry-docker-registry.registry.svc.cluster.local:5000
                 repo: fromej
                 tags:
                   - latest
