@@ -2,10 +2,30 @@ version: 1
 kind: pipeline
 spec:
   stages:
-    - name: build
-      type: ci
+    - name: deploy
       spec:
         steps:
+          - name: chartmuseum_deploy
+            type: run
+            spec:
+              container:
+                image: evertjstam/drone-helm3:0.16
+                pull: if-not-exists
+              envs:
+                ADD_REPOS: chartmuseum=https://chartmuseum.github.io/charts
+                CHART: chartmuseum/chartmuseum
+                MODE: upgrade
+                NAMESPACE: chartmuseum
+                CREATE_NAMESPACE: "true"
+                RELEASE: chartmuseum
+                WAIT_FOR_UPGRADE: "true"
+                TIMEOUT: "20m"
+                VALUES_FILES: values.yaml
+                KUBE_API_SERVER: ${{ secrets.get("k3s_api_server") }}
+                KUBE_TOKEN: ${{ secrets.get("k3s_token") }}
+                KUBE_CERTIFICATE: ${{ secrets.get("k3s_cert") }}
+                KUBE_SERVICE_ACCOUNT: ${{ secrets.get("k3s_service_account") }}
+              name: chartmuseum_deploy
           - type: plugin
             spec:
               name: docker
