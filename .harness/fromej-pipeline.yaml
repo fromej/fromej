@@ -1,0 +1,34 @@
+version: 1
+kind: pipeline
+spec:
+  stages:
+    - name: build
+      type: ci
+      spec:
+        steps:
+          - name: build docks
+            type: run
+            spec:
+              name: build docks
+              shell: bash
+              script: |-
+                pip install -r requirements.txt
+                mkdocs build
+              container:
+                image: python
+                pull: if-not-exists
+          - type: plugin
+            spec:
+              name: docker
+              inputs:
+                add_host: ""
+                auto_tag: true
+                dockerfile: Dockerfile
+                mtu: ""
+                platform: linux/arm64
+                purge: false
+                registry: http://registry-docker-registry.registry.svc.cluster.local
+                repo: fromej
+                tags:
+                  - latest
+                  - ${{ build.commit:0:8 }}
