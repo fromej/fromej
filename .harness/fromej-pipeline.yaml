@@ -20,4 +20,4 @@ spec:
                 insecure: true
                 tags:
                   - latest
-                  - ${{ build.commit:0:8 }}
+                  - build.commit:0:8
