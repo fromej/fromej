@@ -19,8 +19,8 @@ spec:
                 repo: registry.fromej.nl/ej/fromej
                 insecure: true
                 tags:
-                - ${{ build.commit[-8:] }}
-                - latest
+                  - ${{ build.commit }}
+                  - latest
           - name: fromej_deploy
             type: run
             spec:
