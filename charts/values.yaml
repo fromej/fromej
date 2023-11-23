@@ -72,7 +72,7 @@ diagnosticMode:
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
-  registry: registry-docker-registry.registry.svc.cluster.local:5000
+  registry: ""
   repository: ej/fromej
   tag: latest
   digest: ""
@@ -208,7 +208,7 @@ topologySpreadConstraints: []
 ## @param podSecurityContext.sysctls sysctl settings of the NGINX pods
 ##
 podSecurityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
   ## sysctl settings
   ## Example:
@@ -229,7 +229,7 @@ podSecurityContext:
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
-  enabled: true
+  enabled: false
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -244,7 +244,7 @@ containerSecurityContext:
 ## @param containerPorts.https Sets https port inside NGINX container
 ##
 containerPorts:
-  http: 8080
+  http: 80
   https: ""
 ## @param extraContainerPorts Array of additional container ports for the Nginx container
 ## e.g:
@@ -544,13 +544,12 @@ staticSitePVC: ""
 service:
   ## @param service.type Service type
   ##
-  type: LoadBalancer
+  type: ClusterIp
   ## @param service.ports.http Service HTTP port
   ## @param service.ports.https Service HTTPS port
   ##
   ports:
     http: 80
-    https: 443
   ##
   ## @param service.nodePorts [object] Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
@@ -562,9 +561,7 @@ service:
   ## Listeners for the Loadbalancer can be custom mapped to the http or https service.
   ## Example: Mapping the https listener to targetPort http [http: https]
   ##
-  targetPort:
-    http: http
-    https: https
+  targetPort: http
   ## @param service.clusterIP NGINX service Cluster IP
   ## e.g.:
   ## clusterIP: None
