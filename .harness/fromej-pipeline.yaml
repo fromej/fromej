@@ -15,8 +15,8 @@ spec:
                 auto_tag: true
                 dockerfile: Dockerfile
                 platform: linux/arm64
-                registry: http://registry-docker-registry.registry.svc.cluster.local:5000
-                repo: registry-docker-registry.registry.svc.cluster.local:5000/ej/fromej
+                registry: registry.fromej.nl
+                repo: registry.fromej.nl/ej/fromej
                 insecure: true
                 tags:
                 - ${{ build.commit[-8:] }}
