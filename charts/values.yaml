@@ -10,7 +10,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry: registry-docker-registry.registry.svc.cluster.local:5000
+  imageRegistry: registry.fromej.nl
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
