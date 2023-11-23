@@ -21,3 +21,23 @@ spec:
                 tags:
                 - ${{ build.commit[-8:] }}
                 - latest
+          - name: fromej_deploy
+            type: run
+            spec:
+              container:
+                image: evertjstam/drone-helm3:0.16
+                pull: if-not-exists
+              envs:
+                ADD_REPOS: bitnami=https://charts.bitnami.com/bitnami
+                CHART: bitnami/nginx
+                MODE: upgrade
+                NAMESPACE: fromej
+                CREATE_NAMESPACE: "true"
+                RELEASE: fromej
+                WAIT_FOR_UPGRADE: "true"
+                TIMEOUT: "20m"
+                VALUES_FILES: values.yaml
+                KUBE_API_SERVER: ${{ secrets.get("k3s_api_server") }}
+                KUBE_TOKEN: ${{ secrets.get("k3s_token") }}
+                KUBE_CERTIFICATE: ${{ secrets.get("k3s_cert") }}
+                KUBE_SERVICE_ACCOUNT: ${{ secrets.get("k3s_service_account") }}
