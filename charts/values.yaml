@@ -72,7 +72,7 @@ diagnosticMode:
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
-  registry: http://registry-docker-registry.registry.svc.cluster.local:5000
+  registry: registry-docker-registry.registry.svc.cluster.local:5000
   repository: ej/fromej
   tag: latest
   digest: ""
