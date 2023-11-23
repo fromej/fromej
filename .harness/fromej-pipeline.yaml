@@ -3,6 +3,7 @@ kind: pipeline
 spec:
   stages:
     - name: deploy
+      type: ci
       spec:
         steps:
           - type: plugin
