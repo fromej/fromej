@@ -19,5 +19,5 @@ spec:
                 repo: registry-docker-registry.registry.svc.cluster.local:5000/ej/fromej
                 insecure: true
                 tags:
-                - "${DRONE_COMMIT_SHA:0:8}"
+                - ${{ build.commit[-8:] }}
                 - latest
