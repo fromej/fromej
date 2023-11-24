@@ -20,7 +20,7 @@ spec:
                 registry: registry.fromej.nl
                 repo: registry.fromej.nl/ej/fromej
                 insecure: true
-                tags: ${{build.number}}
+                # tags: ${{build.number}}
           - name: fromej_deploy
             type: run
             when: |
@@ -38,7 +38,7 @@ spec:
                 RELEASE: fromej
                 WAIT_FOR_UPGRADE: "true"
                 TIMEOUT: "20m"
-                VALUES: image.tag=${{build.number}}
+                # VALUES: image.tag=${{build.number}}
                 VALUES_FILES: charts/values.yaml
                 KUBE_API_SERVER: ${{ secrets.get("k3s_api_server") }}
                 KUBE_TOKEN: ${{ secrets.get("k3s_token") }}
