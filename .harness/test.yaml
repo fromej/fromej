@@ -18,4 +18,4 @@ spec:
                 repo: registry.fromej.nl/ej/fromej
                 insecure: true
                 tags:
-                  - ${{build.commit}}
+                  - test
