@@ -16,6 +16,4 @@ spec:
                 platform: linux/arm64
                 registry: registry.fromej.nl
                 repo: registry.fromej.nl/ej/fromej
-                insecure: true
-                tags:
-                  - test
+                tags: ${{ build.commit}}
