@@ -10,4 +10,4 @@ spec:
             type: run
             spec:
               container: alpine
-              script: echo ${{build.commit[:-8]}}
+              script: echo ${{build.commit[-8:]}}
