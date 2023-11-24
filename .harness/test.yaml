@@ -2,12 +2,20 @@ version: 1
 kind: pipeline
 spec:
   stages:
-    - name: build
+    - name: deploy
       type: ci
       spec:
         steps:
-          - name: build
-            type: run
+          - type: plugin
             spec:
-              container: alpine
-              script: echo ${{build.commit}}
+              name: docker
+              inputs:
+                username: ${{ secrets.get("docker_username") }}
+                password: ${{ secrets.get("docker_password") }}
+                dockerfile: Dockerfile
+                platform: linux/arm64
+                registry: registry.fromej.nl
+                repo: registry.fromej.nl/ej/fromej
+                insecure: true
+                tags:
+                  - ${{build.commit}}
