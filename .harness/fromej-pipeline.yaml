@@ -7,6 +7,8 @@ spec:
       spec:
         steps:
           - type: plugin
+            when: |
+              build.target == "main"
             spec:
               name: docker
               inputs:
@@ -21,6 +23,8 @@ spec:
                 tags: ${{build.commit[-8:]}}
           - name: fromej_deploy
             type: run
+            when: |
+              build.target == "main"
             spec:
               container:
                 image: evertjstam/drone-helm3:0.16
